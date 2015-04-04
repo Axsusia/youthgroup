@@ -1,3 +1,4 @@
+
 var http = require('http');
 var url = require("url");
 var requestHandlers = require("./requestHandlers");
@@ -9,7 +10,7 @@ urlPath["/login"] = requestHandlers.login;
 urlPath["/error"] = requestHandlers.error;
 
 http.createServer(function (request, response) {
- 	var pathname = url.parse(request.url).pathname;
+	var pathname = url.parse(request.url).pathname;
 	console.log("Request for " + pathname + " received.");
 	/* do something */
 	/*need*/
@@ -17,12 +18,9 @@ http.createServer(function (request, response) {
 		/* global error page */
 		console.log(pathname);
 		console.log(urlPath[pathname]);
-		if(urlPath[pathname] == null || urlPath[pathname] == undefined ){
+		if( ! urlPath[pathname] ){
 			urlPath["/error"](request,response,parameter);
-			return;
-		}
-		/* do something */
-		if(request.method == "POST"){
+		} else if(request.method == "POST" ){
 			console.log("method POST");
 			var data = "";
 			request.on('data', function(postData){
@@ -39,7 +37,7 @@ http.createServer(function (request, response) {
 		}
 	}
 
-    //response.writeHead(200, {"Content-Type": "text/plain"});
-    //response.end();
+	//response.writeHead(200, {"Content-Type": "text/plain"});
+	//response.end();
 }).listen(8888);
 console.log('Server running at http://127.0.0.1:8888/');
